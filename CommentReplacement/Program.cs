@@ -24,13 +24,15 @@ namespace CommentReplacement {
         }
 
         public static void ReplaceComments(string path) {
+            Console.WriteLine(String.Format("Current file: {0}", path.Split('\\').Last()));
+
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, true)) {
                 IEnumerable<OpenXmlElement> elements = document.MainDocumentPart.Document.Body.ToList();
                 HashSet<OpenXmlElement> uniqueElementsToRemove = new HashSet<OpenXmlElement>();
                 List<OpenXmlElement> elementsToRemove = new List<OpenXmlElement>();
 
                 bool removal = false;
-                Regex translationModifiedRegex = new Regex("modified for translation");
+                Regex translationModifiedRegex = new Regex("T2S-ESES-R3( )*#( )*CRE( )*#(.)* modified for translation");
                 Regex trailingHashtagRegex = new Regex("^( )*##( )*$");
                 Regex colorRegex = new Regex("0{4}F{2}");
 
@@ -66,6 +68,7 @@ namespace CommentReplacement {
                 }
 
                 document.MainDocumentPart.Document.Save();
+                Console.WriteLine();
             }
         }
     }
