@@ -13,11 +13,12 @@ namespace CommentReplacement {
         public static void Main(string[] args) {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", "testT.docx");
+            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", "test.docx");
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, true)) {
                 IEnumerable<OpenXmlElement> elements = document.MainDocumentPart.Document.Body.ToList();
-                HashSet<OpenXmlElement> elementsToRemove = new HashSet<OpenXmlElement>();
+                HashSet<OpenXmlElement> uniqueElementsToRemove = new HashSet<OpenXmlElement>();
+                List<OpenXmlElement> elementsToRemove = new List<OpenXmlElement>();
 
                 bool removal = false;
                 Regex translationModifiedRegex = new Regex("##(.)*translation(.)*#");
@@ -29,20 +30,28 @@ namespace CommentReplacement {
                     if (removal) { elementsToRemove.Add(element); }
 
                     // enable removal for elements following a 'Commentaire'
-                    if (element.InnerText.Contains("Attribute=\"Commentaire\"")) { removal = true; }
+                    // and clear the current to be removed elements
+                    if (element.InnerText.Contains("Attribute=\"Commentaire\"")) {
+                        removal = true;
+                        elementsToRemove.Clear();
+                    }
 
                     // disable removal for elements following 'Constraint modified ...'
-                    if (translationModifiedRegex.IsMatch(element.InnerText)) { removal = false; }
+                    // and add current elements to be removed to the hashset used for actual removal
+                    if (translationModifiedRegex.IsMatch(element.InnerText)) {
+                        removal = false;
+                        uniqueElementsToRemove.UnionWith(elementsToRemove);
+                    }
 
                     // prepare trailing hashtags for removal
                     if (trailingHashtagRegex.IsMatch(element.InnerText) && colorRegex.IsMatch(element.InnerXml)) {
-                        elementsToRemove.Add(element);
+                        uniqueElementsToRemove.Add(element);
                     }
                 }
 
-                Console.WriteLine(String.Format("Paragraphs to be removed: {0}", elementsToRemove.Count));
+                Console.WriteLine(String.Format("Paragraphs to be removed: {0}", uniqueElementsToRemove.Count));
 
-                foreach (OpenXmlElement elementToRemove in elementsToRemove) {
+                foreach (OpenXmlElement elementToRemove in uniqueElementsToRemove) {
                     elementToRemove.RemoveAllChildren();
                     elementToRemove.Remove();
                 }
