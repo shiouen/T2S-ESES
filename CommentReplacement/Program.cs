@@ -13,8 +13,17 @@ namespace CommentReplacement {
         public static void Main(string[] args) {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", "test.docx");
+            string filesPath = Path.Combine(Environment.CurrentDirectory, @"Files\");
+            string[] paths = Directory.GetFiles(filesPath, "*.docx");
 
+            foreach (string path in paths) { ReplaceComments(path); }
+
+            stopwatch.Stop();
+            Console.WriteLine(String.Format("Stopwatch: {0}", stopwatch.ElapsedMilliseconds));
+            Console.Read();
+        }
+
+        public static void ReplaceComments(string path) {
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, true)) {
                 IEnumerable<OpenXmlElement> elements = document.MainDocumentPart.Document.Body.ToList();
                 HashSet<OpenXmlElement> uniqueElementsToRemove = new HashSet<OpenXmlElement>();
@@ -58,10 +67,6 @@ namespace CommentReplacement {
 
                 document.MainDocumentPart.Document.Save();
             }
-
-            stopwatch.Stop();
-            Console.WriteLine(String.Format("Stopwatch: {0}", stopwatch.ElapsedMilliseconds));
-            Console.Read();
         }
     }
 }
