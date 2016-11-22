@@ -13,7 +13,7 @@ namespace CommentReplacement {
         public static void Main(string[] args) {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", "test.docx");
+            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", "testT.docx");
 
             using (WordprocessingDocument document = WordprocessingDocument.Open(path, true)) {
                 IEnumerable<OpenXmlElement> elements = document.MainDocumentPart.Document.Body.ToList();
@@ -21,7 +21,7 @@ namespace CommentReplacement {
 
                 bool removal = false;
                 Regex translationModifiedRegex = new Regex("##(.)*translation(.)*#");
-                Regex trailingHashtagRegex = new Regex("^##$");
+                Regex trailingHashtagRegex = new Regex("^( )*##( )*$");
                 Regex colorRegex = new Regex("0{4}F{2}");
 
                 foreach (OpenXmlElement element in elements) {
@@ -36,6 +36,7 @@ namespace CommentReplacement {
 
                     // prepare trailing hashtags for removal
                     if (trailingHashtagRegex.IsMatch(element.InnerText) && colorRegex.IsMatch(element.InnerXml)) {
+                        Console.WriteLine("hi");
                         elementsToRemove.Add(element);
                     }
                 }
