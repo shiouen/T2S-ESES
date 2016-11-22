@@ -30,7 +30,7 @@ namespace CommentReplacement {
                 List<OpenXmlElement> elementsToRemove = new List<OpenXmlElement>();
 
                 bool removal = false;
-                Regex translationModifiedRegex = new Regex("##(.)*translation(.)*#");
+                Regex translationModifiedRegex = new Regex("modified for translation");
                 Regex trailingHashtagRegex = new Regex("^( )*##( )*$");
                 Regex colorRegex = new Regex("0{4}F{2}");
 
