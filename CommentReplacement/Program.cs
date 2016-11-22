@@ -22,6 +22,7 @@ namespace CommentReplacement {
                 bool removal = false;
                 Regex translationModifiedRegex = new Regex("##(.)*translation(.)*#");
                 Regex trailingHashtagRegex = new Regex("^##$");
+                Regex colorRegex = new Regex("0{4}F{2}");
 
                 foreach (OpenXmlElement element in elements) {
                     // prepare an element for removal if enabled
@@ -34,9 +35,7 @@ namespace CommentReplacement {
                     if (translationModifiedRegex.IsMatch(element.InnerText)) { removal = false; }
 
                     // prepare trailing hashtags for removal
-                    if (trailingHashtagRegex.IsMatch(element.InnerText)) {
-                        // in some cases no 'Constraint modifed ...', but only trailing
-                        removal = false;
+                    if (trailingHashtagRegex.IsMatch(element.InnerText) && colorRegex.IsMatch(element.InnerXml)) {
                         elementsToRemove.Add(element);
                     }
                 }
