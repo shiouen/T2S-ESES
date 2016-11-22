@@ -36,7 +36,6 @@ namespace CommentReplacement {
 
                     // prepare trailing hashtags for removal
                     if (trailingHashtagRegex.IsMatch(element.InnerText) && colorRegex.IsMatch(element.InnerXml)) {
-                        Console.WriteLine("hi");
                         elementsToRemove.Add(element);
                     }
                 }
