@@ -10,6 +10,10 @@ using DocumentFormat.OpenXml.Packaging;
 
 namespace CommentReplacement {
     public class Program {
+        /**
+         * Starts a stopwatch, gathers all file paths of the documents in the 'Files' folder
+         * and removes the French comments.
+         */
         public static void Main(string[] args) {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -23,6 +27,14 @@ namespace CommentReplacement {
             Console.Read();
         }
 
+        /**
+         * Replaces French comments following a 'Commentaire' attributed xml tag.
+         * Blue hashtag-surrounded indicators are also removed.
+         * 
+         * The resulting documents can be found in the bin folder of the project.
+         * 
+         * @param path The full path to the targeted document.
+         */
         public static void ReplaceComments(string path) {
             Console.WriteLine(String.Format("Current file: {0}", path.Split('\\').Last()));
 
@@ -73,4 +85,3 @@ namespace CommentReplacement {
         }
     }
 }
- 
