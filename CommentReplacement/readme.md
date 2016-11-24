@@ -10,6 +10,7 @@ After this program has been used one should compare the original document with t
 one to make sure the file has been handled correctly.
 
 Example:
+<pre>
 <O@@vyiwO8)d4fO2 Type="Contrainte">
 <A@@Z20000000D60 Attribute="Nom court">
 EA-MT-1710
@@ -29,8 +30,10 @@ For MT042
 The 'Sub account type' field is fed by the default value 'L1' in the message to be enriched.
 
 ##
+</pre>
 
 Result:
+<pre>
 <O@@vyiwO8)d4fO2 Type="Contrainte">
 <A@@Z20000000D60 Attribute="Nom court">
 EA-MT-1710
@@ -41,3 +44,4 @@ Feeding rule of the sub-account type
 For MT042
 
 The 'Sub account type' field is fed by the default value 'L1' in the message to be enriched.
+</pre>
